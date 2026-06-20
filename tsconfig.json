@@ -18,6 +18,17 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "lib/**/*.ts",
+    "prisma/**/*.ts",
+    "next.config.ts",
+    "tailwind.config.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", "seed.ts", "init-db.ts", "route.ts"]
 }
