@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { calcSettingRates } from "../lib/calculations";
+import { calcSettingRates } from "./lib/calculations";
 
 const prisma = new PrismaClient();
 
@@ -36,28 +36,28 @@ async function main() {
   if (materialCount === 0) {
     await prisma.material.createMany({
       data: [
-      {
-        materialName: "シナ合板",
-        category: "合板",
-        thickness: 12,
-        width: 910,
-        length: 1820,
-        supplier: "標準",
-        unitPrice: 4200,
-        shippingCost: 800,
-        lossRate: 0.1,
-      },
-      {
-        materialName: "MDF",
-        category: "板材",
-        thickness: 9,
-        width: 910,
-        length: 1820,
-        supplier: "標準",
-        unitPrice: 2500,
-        shippingCost: 800,
-        lossRate: 0.08,
-      },
+        {
+          materialName: "シナ合板",
+          category: "合板",
+          thickness: 12,
+          width: 910,
+          length: 1820,
+          supplier: "標準",
+          unitPrice: 4200,
+          shippingCost: 800,
+          lossRate: 0.1,
+        },
+        {
+          materialName: "MDF",
+          category: "板材",
+          thickness: 9,
+          width: 910,
+          length: 1820,
+          supplier: "標準",
+          unitPrice: 2500,
+          shippingCost: 800,
+          lossRate: 0.08,
+        },
       ],
     });
   }
