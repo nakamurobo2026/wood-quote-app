@@ -29,12 +29,16 @@ http://localhost:3000
 
 ## GitHub Codespaces でのセットアップ
 
-GitHub 上でもセットアップできます。
+GitHub 上でもセットアップして、ブラウザから閲覧できます。
 
 1. リポジトリページで `Code` を押す
 2. `Codespaces` タブを開く
 3. `Create codespace on main` を押す
-4. セットアップ完了後、ポート `3000` のプレビューを開く
+4. セットアップ完了後、`PORTS` から `3000` を開く
+5. `Open in Browser` または `Preview in Browser` で表示する
+
+Codespaces では `localhost:3000` の代わりに、GitHub が発行するプレビューURLで閲覧します。
+`.devcontainer/devcontainer.json` ではポート `3000` を `public` に設定しています。
 
 `.devcontainer/devcontainer.json` により、Codespaces 作成時に以下が自動実行されます。
 
@@ -48,6 +52,8 @@ Codespaces に接続すると、以下も自動実行されます。
 ```bash
 npm run dev
 ```
+
+> GitHub Pages では動きません。このアプリは Next.js のAPI、Prisma、SQLiteを使うため、Codespaces または Node.js が動く環境で起動してください。
 
 ## GitHub Actions
 
@@ -93,7 +99,7 @@ C:\Users\unknown\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\pn
 - 右側サマリー固定
 - 見積金額を常に表示
 - 入力変更時にリアルタイム再計算
-- 白・グレー基調
+- 白・明るいブルー基調
 - 数字を大きく表示
 - スマホ対応
 
