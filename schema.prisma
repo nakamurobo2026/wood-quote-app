@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum QuoteType {
+  NORMAL
+  PROTOTYPE
+  LOT
+  PROTOTYPE_AND_MASS_PRODUCTION
+}
+
+model Estimate {
+  id              String    @id @default(cuid())
+  name            String
+  customerName    String?
+  drawingFileName String?
+  memo            String?
+  quoteType       QuoteType @default(NORMAL)
+
+  materialCost    Int   @default(0)
+  processingCost  Int   @default(0)
+  setupCost       Int   @default(0)
+  finishingCost   Int   @default(0)
+  inspectionCost  Int   @default(0)
+  packingCost     Int   @default(0)
+  prototypeCost   Int   @default(0)
+  outsourcingCost Int   @default(0)
+  consumableCost  Int   @default(0)
+  riskCost        Int   @default(0)
+  profit          Int   @default(0)
+  quoteAmount     Int   @default(0)
+  grossMarginRate Float @default(0)
+
+  issuedAt  DateTime?
+  expiresAt DateTime?
+  quoteNote String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  materials  EstimateMaterial[]
+  processing EstimateProcessing?
+  prototype  EstimatePrototype?
+  actual     EstimateActual?
+  lotRows    EstimateLotRow[]
+}
+
+model EstimateMaterial {
+  id         String  @id @default(cuid())
+  estimateId String
+  materialId String?
+
+  materialName String
+  category     String?
+  thickness    Float?
+  sheetWidth   Float
+  sheetLength  Float
+  supplier     String?
+  unitPrice    Int
+  shippingCost Int   @default(0)
+  lossRate     Float @default(0)
+
+  requiredWidth  Float
+  requiredLength Float
+  quantity       Int
+  yieldRate      Float @default(1)
+  extraRate      Float @default(0)
+
+  requiredArea   Float @default(0)
+  sheetArea      Float @default(0)
+  requiredSheets Int   @default(0)
+  materialCost   Int   @default(0)
+  lossCost       Int   @default(0)
+  totalCost      Int   @default(0)
+  sortOrder      Int   @default(0)
+
+  estimate Estimate  @relation(fields: [estimateId], references: [id], onDelete: Cascade)
+  material Material? @relation(fields: [materialId], references: [id])
+}
+
+model EstimateProcessing {
+  id         String @id @default(cuid())
+  estimateId String @unique
+
+  requiredQuantity  Int   @default(1)
+  partsPerRun       Int   @default(1)
+  minutesPerRun     Float @default(0)
+  setupMinutes      Float @default(0)
+  toolChangeMinutes Float @default(0)
+  finishingMinutes  Float @default(0)
+  inspectionMinutes Float @default(0)
+  packingMinutes    Float @default(0)
+
+  runCount         Int   @default(0)
+  machineMinutes   Float @default(0)
+  totalWorkMinutes Float @default(0)
+
+  machineRate   Int @default(0)
+  setupRate     Int @default(0)
+  handworkRate  Int @default(0)
+  finishingRate Int @default(0)
+
+  processingCost Int @default(0)
+  setupCost      Int @default(0)
+  finishingCost  Int @default(0)
+  inspectionCost Int @default(0)
+  packingCost    Int @default(0)
+
+  estimate Estimate @relation(fields: [estimateId], references: [id], onDelete: Cascade)
+}
+
+model EstimatePrototype {
+  id        String @id @default(cuid())
+  estimateId String @unique
+
+  dataCheckCost     Int @default(0)
+  designCost        Int @default(0)
+  conditionTestCost Int @default(0)
+  jigReviewCost     Int @default(0)
+  revisionCost      Int @default(0)
+  prototypeRiskCost Int @default(0)
+  totalCost         Int @default(0)
+
+  estimate Estimate @relation(fields: [estimateId], references: [id], onDelete: Cascade)
+}
+
+model EstimateLotRow {
+  id         String @id @default(cuid())
+  estimateId String
+  quantity   Int
+  totalPrice Int   @default(0)
+  unitPrice  Int   @default(0)
+  cost       Int   @default(0)
+  profit     Int   @default(0)
+  profitRate Float @default(0)
+  sortOrder  Int   @default(0)
+
+  estimate Estimate @relation(fields: [estimateId], references: [id], onDelete: Cascade)
+}
+
+model EstimateActual {
+  id                 String @id @default(cuid())
+  estimateId         String @unique
+  actualWorkMinutes  Float  @default(0)
+  actualMaterialCost Int    @default(0)
+  memo               String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  estimate Estimate @relation(fields: [estimateId], references: [id], onDelete: Cascade)
+}
+
+model Material {
+  id           String   @id @default(cuid())
+  materialName String
+  category     String?
+  thickness    Float?
+  width        Float
+  length       Float
+  supplier     String?
+  unitPrice    Int
+  shippingCost Int      @default(0)
+  lossRate     Float    @default(0)
+  updatedAt    DateTime @updatedAt
+
+  estimateRows EstimateMaterial[]
+}
+
+model MachiningCondition {
+  id           String   @id @default(cuid())
+  material     String
+  toolDiameter Float?
+  toolType     String?
+  rpm          Int?
+  feedRate     Float?
+  depthPerPass Float?
+  stepover     Float?
+  result       String?
+  memo         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Setting {
+  id String @id @default("default")
+
+  rent          Int @default(0)
+  electricity   Int @default(0)
+  communication Int @default(0)
+  software      Int @default(0)
+  vehicle       Int @default(0)
+  insurance     Int @default(0)
+  consumables   Int @default(0)
+  loanRepayment Int @default(0)
+  taxReserve    Int @default(0)
+  livingCost    Int @default(0)
+  desiredProfit Int @default(0)
+
+  workingDays     Int   @default(20)
+  hoursPerDay     Float @default(8)
+  utilizationRate Float @default(0.7)
+  bufferRate      Float @default(0.1)
+
+  baseHourlyRate Int @default(0)
+  designRate     Int @default(0)
+  machineRate    Int @default(0)
+  setupRate      Int @default(0)
+  handworkRate   Int @default(0)
+  finishingRate  Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

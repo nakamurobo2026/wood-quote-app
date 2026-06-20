@@ -1,0 +1,22 @@
+{
+  "name": "Wood Quote MVP",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Wood Quote",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "postCreateCommand": "cp .env.example .env && npm install && npm run setup",
+  "postAttachCommand": "npm run dev",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Prisma.prisma",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
