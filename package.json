@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
-    "build": "prisma generate --schema=prisma/schema.prisma && prisma db push --schema=prisma/schema.prisma && tsx prisma/seed.ts && next build",
+    "build": "prisma generate --schema=prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "setup": "prisma generate --schema=prisma/schema.prisma && prisma db push --schema=prisma/schema.prisma && tsx prisma/seed.ts",
