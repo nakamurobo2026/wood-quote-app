@@ -7,12 +7,13 @@
 - Next.js App Router
 - TypeScript
 - Prisma
-- SQLite
+- PostgreSQL / Neon
 - Tailwind CSS
 
 ## セットアップ
 
 通常の Node.js / npm 環境では以下で起動できます。
+`.env` の `DATABASE_URL` には Neon などの PostgreSQL 接続URLを入れてください。
 
 ```bash
 npm install
@@ -53,7 +54,23 @@ Codespaces に接続すると、以下も自動実行されます。
 npm run dev
 ```
 
-> GitHub Pages では動きません。このアプリは Next.js のAPI、Prisma、SQLiteを使うため、Codespaces または Node.js が動く環境で起動してください。
+> GitHub Pages では動きません。このアプリは Next.js のAPI、Prisma、PostgreSQLを使うため、Vercel、Codespaces、または Node.js が動く環境で起動してください。
+
+## Vercel で公開する
+
+1. Vercel で `nakamurobo2026/wood-quote-app` を Import する
+2. Neon などの PostgreSQL を接続する
+3. Environment Variables に `DATABASE_URL` が入っていることを確認する
+4. `Deploy` を押す
+
+ビルド時に以下が実行されます。
+
+```bash
+prisma generate
+prisma db push
+tsx prisma/seed.ts
+next build
+```
 
 ## GitHub Actions
 
@@ -99,15 +116,15 @@ C:\Users\unknown\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\pn
 - 右側サマリー固定
 - 見積金額を常に表示
 - 入力変更時にリアルタイム再計算
-- 白・明るいブルー基調
+- 白・グレー基調
 - 数字を大きく表示
 - スマホ対応
 
-## SQLite 初期化
+## DB 初期化
 
 Prisma schema は `prisma/schema.prisma` に定義しています。
 
-このMVPではローカル起動を優先し、SQLiteテーブル作成は `prisma/init-db.ts` で実行します。
+このMVPでは Prisma の `db push` で PostgreSQL にテーブルを作成します。
 
 ```bash
 npm run setup
