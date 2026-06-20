@@ -9,7 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#17202a",
+        ink: "#142033",
+        skyline: "#e8f6ff",
+        accent: "#0ea5e9",
       },
     },
   },
