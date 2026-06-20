@@ -3,6 +3,8 @@ import { LinkButton } from "@/components/ui/Button";
 import { dateText, percent, yen } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export default async function EstimatesPage() {
   const estimates = await prisma.estimate.findMany({
     orderBy: { updatedAt: "desc" },
